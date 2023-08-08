@@ -6,7 +6,6 @@ Created on Sat Jul 18 13:01:02 2020
 """
 #import selenium drivers
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -36,19 +35,21 @@ class GoogleImageScraper():
             print("[INFO] Image path not found. Creating a new folder.")
             os.makedirs(image_path)
             
-        #check if chromedriver is installed
-        if (not os.path.isfile(webdriver_path)):
-            is_patched = patch.download_lastest_chromedriver()
-            if (not is_patched):
-                exit("[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:https://chromedriver.chromium.org/downloads")
+        # #check if chromedriver is installed
+        # if (not os.path.isfile(webdriver_path)):
+        #     is_patched = patch.download_lastest_chromedriver()
+        #     if (not is_patched):
+        #         exit("[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:https://chromedriver.chromium.org/downloads")
 
         for i in range(1):
             try:
                 #try going to www.google.com
-                options = Options()
+                options = webdriver.ChromeOptions()
                 if(headless):
-                    options.add_argument('--headless')
-                driver = webdriver.Chrome(webdriver_path, chrome_options=options)
+                  options.add_argument('--headless')
+                  options.add_argument('--no-sandbox')
+                  options.add_argument('--disable-dev-shm-usage')
+                driver = webdriver.Chrome(options=options)
                 driver.set_window_size(1400,1050)
                 driver.get("https://www.google.com")
                 try:
